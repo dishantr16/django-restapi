@@ -1,9 +1,10 @@
 import json
-
+from django.core.serializers import serialize
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from restapi.mixins import JsonResponseMixin
+
 from .models import Update
 
 # def detail_view(request):
@@ -28,13 +29,28 @@ def JsonCBV(View):
         return JsonResponse(data)
 
 
-class JsonCBV2(View, JsonResponseMixin):
+class SerilaizedDetailView(View):
     def get(self, request, *args, **kwargs):
+        obj=Update.object.get(id=1)
         data = {
-            "count":1000,
-            "content":"Some new content"
+            "user":obj.user.username,
+            "content":obj.content
         }
-        return self.render_to_json_respone(data)
+        json_data = json.dumps(data)
+        return HttpResponse(json_data, content_type='application/json')
+
+
+class SerilaizedListView(View):
+    def get(self, request, *args, **kwargs):
+        qs=Update.object.all()
+        data=serialize('json',qs, fields=('user','content'))
+        print(data)
+        data = {
+            "user":obj.user.username,
+            "content":obj.content
+        }
+        json_data = json.dumps(data)
+        return HttpResponse(json_data, content_type='application/json')
 
 
 
