@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.serializers import serialize
 from django.contrib.auth.models import User
 
 def upload_update_image(instance, filename):
@@ -14,3 +15,7 @@ class Update(models.Model):
 
     def __str__(self):
         return self.content or ''
+
+
+    def serialize(self):
+        return serialize("json",[self], fields=('user','content','image'))

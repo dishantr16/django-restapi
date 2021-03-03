@@ -45,10 +45,10 @@ class SerilaizedListView(View):
         qs=Update.object.all()
         data=serialize('json',qs, fields=('user','content'))
         print(data)
-        data = {
-            "user":obj.user.username,
-            "content":obj.content
-        }
+        # data = {
+        #     "user":obj.user.username,
+        #     "content":obj.content
+        # }
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
 
